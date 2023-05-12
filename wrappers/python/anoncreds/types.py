@@ -392,14 +392,14 @@ class Presentation(bindings.AnoncredsObject):
                         cred.handle, timestamp, rev_state and rev_state.handle
                     )
                 )
-                for (reft, reveal) in attrs:
-                    creds_prove.append(
-                        bindings.CredentialProve.attribute(entry_idx, reft, reveal)
-                    )
-                for reft in preds:
-                    creds_prove.append(
-                        bindings.CredentialProve.predicate(entry_idx, reft)
-                    )
+                creds_prove.extend(
+                    bindings.CredentialProve.attribute(entry_idx, reft, reveal)
+                    for reft, reveal in attrs
+                )
+                creds_prove.extend(
+                    bindings.CredentialProve.predicate(entry_idx, reft)
+                    for reft in preds
+                )
         return Presentation(
             bindings.create_presentation(
                 pres_req.handle,

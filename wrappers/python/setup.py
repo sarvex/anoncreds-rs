@@ -1,11 +1,12 @@
 """Module setup."""
 
+
 import os
 import runpy
 from setuptools import find_packages, setup
 
 PACKAGE_NAME = "anoncreds"
-version_meta = runpy.run_path("./{}/version.py".format(PACKAGE_NAME))
+version_meta = runpy.run_path(f"./{PACKAGE_NAME}/version.py")
 VERSION = version_meta["__version__"]
 
 with open(os.path.abspath("./README.md"), "r") as fh:

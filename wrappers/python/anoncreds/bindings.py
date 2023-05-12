@@ -366,8 +366,7 @@ def _load_library(lib_name: str) -> CDLL:
 def do_call(fn_name, *args):
     """Perform a synchronous library function call."""
     lib_fn = getattr(get_library(), fn_name)
-    result = lib_fn(*args)
-    if result:
+    if result := lib_fn(*args):
         raise get_current_error(True)
 
 
@@ -406,9 +405,7 @@ def encode_str(arg: Optional[Union[str, bytes]]) -> c_char_p:
     """
     if arg is None:
         return c_char_p()
-    if isinstance(arg, str):
-        return c_char_p(arg.encode("utf-8"))
-    return c_char_p(arg)
+    return c_char_p(arg.encode("utf-8")) if isinstance(arg, str) else c_char_p(arg)
 
 
 class FfiByteBuffer(Structure):
@@ -539,9 +536,7 @@ def create_credential(
     names_list = FfiStrList.create(attr_keys)
     raw_values_list = FfiStrList.create(str(attr_raw_values[k]) for k in attr_keys)
     if attr_enc_values:
-        enc_values_list = []
-        for name in attr_raw_values:
-            enc_values_list.append(attr_enc_values.get(name))
+        enc_values_list = [attr_enc_values.get(name) for name in attr_raw_values]
     else:
         enc_values_list = None
     enc_values_list = FfiStrList().create(enc_values_list)
